@@ -1,0 +1,17 @@
+on:
+  pull_request:
+  push:
+    branches:
+    - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        outputs: type=image

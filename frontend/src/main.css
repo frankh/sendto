@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+button {
+  transition: width 2s;
+}
+
+#secret-field:valid {
+  color: transparent;
+  text-shadow: 0 0 8px rgba(0,0,0,0.5);
+}
+
+#secret-field:active {
+  color: inherit;
+  text-shadow: none;
+}
+
+#secret-field:hover {
+  color: inherit;
+  text-shadow: none;
+}
+
+#secret-field:focus {
+  color: inherit;
+  text-shadow: none;
+}

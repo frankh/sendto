@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>sendto</title>
+    <link rel="stylesheet" href="/static/dist/main.css" />
+    <link rel="shortcut icon" href="/static/favicon.png" />
+  </head>
+  <body class="bg-orange-100 p-4">
+    <h1 class="text-3xl font-bold mb-4">Secure message from {{ .From }}</h1>
+    <pre id="message" class="bg-white p-4 rounded-lg shadow-md">
+      Loading...
+    </pre>
+  </body>
+  <script>
+    window.CIPHERTEXT = "{{ .CipherText }}";
+  </script>
+  <script src="/static/dist/receive.js"></script>
+</html>
