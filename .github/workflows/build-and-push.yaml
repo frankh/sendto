@@ -37,3 +37,5 @@ jobs:
         push: {{ github.ref == 'refs/heads/main' }}
         outputs: type=image
         tags: ${{ steps.meta.outputs.tags }}
+        cache-from: type=gha,scope=sendto
+        cache-to: type=gha,scope=sendto,mode=max
