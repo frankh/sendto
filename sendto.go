@@ -75,7 +75,7 @@ func Run() error {
     }
 
     log.Printf("Running in dev mode on %s ...", *dev)
-    log.Fatal(http.ListenAndServeTLS(*dev, "localhost.crt", "localhost.key", nil))
+    log.Fatal(http.ListenAndServe(*dev, nil))
   }
 
   if *hostname == "" {
@@ -83,6 +83,7 @@ func Run() error {
   }
 
   srv := &tsnet.Server{
+    Dir:        ".tsnet-state",
     ControlURL: *controlURL,
     Hostname:   *hostname,
     Logf: func(format string, args ...any) {
