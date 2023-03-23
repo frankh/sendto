@@ -12,6 +12,7 @@ import (
   "net"
   "net/http"
   "strings"
+  "time"
 
   "tailscale.com/client/tailscale"
   "tailscale.com/hostinfo"
@@ -27,9 +28,8 @@ const defaultHostname = "sendto"
 var (
   verbose    = flag.Bool("verbose", false, "be verbose")
   controlURL = flag.String("control-url", ipn.DefaultControlURL, "the URL base of the control plane (i.e. coordination server)")
-  sqlitefile = flag.String("sqlitedb", "", "path of SQLite database to store files and messages")
+  sqlitefile = flag.String("sqlitedb", "sqlite.db", "path of SQLite database to store files and messages")
   dev        = flag.String("dev-listen", "", "if non-empty, listen on this addr and run in dev mode; auto-set sqlitedb if empty and don't use tsnet")
-  snapshot   = flag.String("snapshot", "", "file path of snapshot file")
   hostname   = flag.String("hostname", defaultHostname, "service name")
 )
 
@@ -55,8 +55,15 @@ func Run() error {
 
   hostinfo.SetApp("sendto")
 
-  database = db.NewSqliteDB("sqlite.db")
+  database = db.NewSqliteDB(*sqlitefile)
   sendHandler := api.SendHandler{database}
+
+  go func() {
+    for {
+      time.Sleep(10 * time.Minute)
+      database.ClearExpired()
+    }
+  }()
 
   http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticFS))))
   http.HandleFunc("/api/send", withUser(sendHandler.Serve))

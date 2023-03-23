@@ -38,6 +38,11 @@ func (sh *SendHandler) Serve(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if r.ContentLength > 50*1024*1024 {
+		http.Error(w, "Max size of message is 50MiB", http.StatusBadRequest)
+		return
+	}
+
 	login, ok := r.Context().Value("login").(string)
 	if !ok {
 		http.Error(w, "Bad login provided", http.StatusBadRequest)

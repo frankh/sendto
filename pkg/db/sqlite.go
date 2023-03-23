@@ -38,10 +38,7 @@ func (d *SqliteDB) Save(message Message) error {
 	_, err := d.db.Exec(
 		"INSERT INTO Messages (ID, FromUser, ToUser, CipherText) VALUES (?, ?, ?, ?)",
 		message.ID, message.From, message.To, message.CipherText)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (d *SqliteDB) Load(ID string) (*Message, error) {
@@ -55,4 +52,9 @@ func (d *SqliteDB) Load(ID string) (*Message, error) {
 		return nil, err
 	}
 	return &message, nil
+}
+
+func (d *SqliteDB) ClearExpired() error {
+	_, err := d.db.Exec("DELETE FROM Messages WHERE ExpiresAt < (strftime('%s', 'now'))")
+	return err
 }

@@ -9,19 +9,22 @@ import {
 const newNonce = () => randomBytes(secretbox.nonceLength);
 export const generateKey = () => encodeBase64(randomBytes(secretbox.keyLength));
 
-export const encryptText = (plaintext, key) => {
-  const keyUint8Array = decodeBase64(key);
+export const encryptText = async (plaintext, key) => {
+  return new Promise(resolve => {
+    const keyUint8Array = decodeBase64(key);
 
-  const nonce = newNonce();
-  const messageUint8 = decodeUTF8(plaintext);
-  const box = secretbox(messageUint8, nonce, keyUint8Array);
+    const nonce = newNonce();
+    const messageUint8 = decodeUTF8(plaintext);
+    const box = secretbox(messageUint8, nonce, keyUint8Array);
 
-  const fullMessage = new Uint8Array(nonce.length + box.length);
-  fullMessage.set(nonce);
-  fullMessage.set(box, nonce.length);
+    const fullMessage = new Uint8Array(nonce.length + box.length);
+    fullMessage.set(nonce);
+    fullMessage.set(box, nonce.length);
 
-  const base64FullMessage = encodeBase64(fullMessage);
-  return base64FullMessage;
+    const base64FullMessage = encodeBase64(fullMessage);
+    resolve(base64FullMessage);
+  });
+
 };
 
 export const decrypt = (messageWithNonce, key) => {

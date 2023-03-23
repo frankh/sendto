@@ -7,9 +7,12 @@
   </head>
   <body class="bg-orange-100 p-4">
     <h1 class="text-3xl font-bold mb-4">Secure message from {{ .From }}</h1>
-    <pre id="message" class="bg-white p-4 rounded-lg shadow-md">
-      Loading...
-    </pre>
+    <pre id="message" class="bg-white p-4 mb-4 rounded-lg shadow-md">Loading...</pre>
+    <div id="file_display" class="hidden bg-white p-4 flex rounded-lg shadow-md flex-wrap">
+      <h2 class="text-xl font-bold mb-2 w-full">Attachments</h2>
+      <div class="file_download_tmpl hidden flex items-center justify-between border border-gray-300 rounded p-2 mb-2 mr-2">
+      </div>
+    </div>
   </body>
   <script>
     window.CIPHERTEXT = "{{ .CipherText }}";
